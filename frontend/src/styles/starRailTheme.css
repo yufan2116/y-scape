@@ -1,0 +1,76 @@
+/**
+ * Y.Scape — Star-Rail-inspired sci-fi dashboard theme tokens
+ * Visual layer only — no business logic
+ */
+
+:root {
+  /* ── Background & space ── */
+  --sr-bg-deep: #0a0b14;
+  --sr-bg-mid: #12152a;
+  --sr-bg-panel: rgba(12, 16, 32, 0.78);
+  --sr-bg-panel-hover: rgba(18, 24, 48, 0.85);
+  --sr-bg-glass: rgba(15, 22, 42, 0.55);
+
+  /* ── Accent palette ── */
+  --sr-gold: #c9a063;
+  --sr-gold-dim: rgba(201, 160, 99, 0.45);
+  --sr-gold-bright: #e8c98a;
+  --sr-cyan: #4deeea;
+  --sr-cyan-dim: rgba(77, 238, 234, 0.35);
+  --sr-purple: #8b7cf7;
+  --sr-purple-deep: #4a3f8a;
+  --sr-blue: #3d7cff;
+  --sr-pink: #e879a9;
+
+  /* ── Semantic status ── */
+  --sr-success: #4ade80;
+  --sr-warning: #fbbf24;
+  --sr-danger: #f87171;
+  --sr-running: #4deeea;
+
+  /* ── Text ── */
+  --sr-text-primary: #eef2ff;
+  --sr-text-secondary: #94a3b8;
+  --sr-text-muted: #64748b;
+  --sr-text-gold: var(--sr-gold-bright);
+
+  /* ── Borders ── */
+  --sr-border-gold: 1px solid rgba(201, 160, 99, 0.38);
+  --sr-border-cyan: 1px solid rgba(77, 238, 234, 0.28);
+  --sr-border-subtle: 1px solid rgba(100, 120, 180, 0.18);
+  --sr-radius-sm: 4px;
+  --sr-radius-md: 8px;
+  --sr-radius-lg: 12px;
+
+  /* ── Shadows & glow ── */
+  --sr-shadow-panel: 0 8px 32px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  --sr-glow-cyan: 0 0 24px rgba(77, 238, 234, 0.22);
+  --sr-glow-gold: 0 0 20px rgba(201, 160, 99, 0.18);
+  --sr-glow-purple: 0 0 40px rgba(139, 124, 247, 0.15);
+
+  /* ── Gradients ── */
+  --sr-gradient-nebula: radial-gradient(ellipse 120% 80% at 20% 10%, rgba(74, 63, 138, 0.35) 0%, transparent 55%),
+    radial-gradient(ellipse 90% 60% at 85% 75%, rgba(61, 124, 255, 0.18) 0%, transparent 50%),
+    radial-gradient(ellipse 70% 50% at 50% 100%, rgba(201, 160, 99, 0.08) 0%, transparent 45%),
+    linear-gradient(180deg, #0a0b14 0%, #0f1224 40%, #12152a 100%);
+  --sr-gradient-progress: linear-gradient(90deg, #3d7cff 0%, #4deeea 50%, #8b7cf7 100%);
+  --sr-gradient-btn: linear-gradient(135deg, rgba(61, 124, 255, 0.9) 0%, rgba(139, 124, 247, 0.85) 100%);
+  --sr-gradient-btn-danger: linear-gradient(135deg, rgba(248, 113, 113, 0.85) 0%, rgba(185, 28, 28, 0.9) 100%);
+
+  /* ── Typography ── */
+  --sr-font-display: "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  --sr-font-mono: "Cascadia Code", "Consolas", "SF Mono", monospace;
+  --sr-text-xs: 0.68rem;
+  --sr-text-sm: 0.8rem;
+  --sr-text-base: 0.875rem;
+  --sr-text-lg: 1.05rem;
+  --sr-text-xl: 1.35rem;
+  --sr-tracking-wide: 0.08em;
+  --sr-tracking-wider: 0.14em;
+
+  /* ── Layout ── */
+  --sr-sidebar-w: 248px;
+  --sr-right-w: 380px;
+  --sr-footer-h: 44px;
+  --sr-gap: 14px;
+}

@@ -1,0 +1,82 @@
+{
+  "tools": [
+    {
+      "tool_id": "bilibili_download",
+      "display_name": "Download-tool",
+      "description": "B 站视频下载工具",
+      "source_project": "Download-tool",
+      "category": "Media",
+      "project_path": "",
+      "python_executable": "",
+      "entry_script": "",
+      "working_directory": "",
+      "enabled": false,
+      "timeout_seconds": 300
+    },
+    {
+      "tool_id": "folder_clean",
+      "display_name": "Folder Clean",
+      "description": "文件夹清理 Web API",
+      "source_project": "folder clean",
+      "category": "Automation",
+      "project_path": "",
+      "python_executable": "",
+      "entry_script": "",
+      "working_directory": "",
+      "enabled": false,
+      "timeout_seconds": 300
+    },
+    {
+      "tool_id": "github_resume_generator",
+      "display_name": "GitHub Resume Generator",
+      "description": "Generate STAR resume bullets from GitHub repositories.",
+      "source_project": "GitHub Resume Generator",
+      "category": "Portfolio",
+      "project_path": "",
+      "python_executable": "",
+      "entry_script": "",
+      "working_directory": "",
+      "enabled": false,
+      "timeout_seconds": 300
+    },
+    {
+      "tool_id": "local_rag_query",
+      "display_name": "Local RAG",
+      "description": "本地 RAG + Ollama",
+      "source_project": "RAG",
+      "category": "Research",
+      "project_path": "",
+      "python_executable": "",
+      "entry_script": "",
+      "working_directory": "",
+      "enabled": false,
+      "timeout_seconds": 300
+    },
+    {
+      "tool_id": "markdown_convert",
+      "display_name": "MARKDOWN",
+      "description": "Pandoc / PDF 转 Markdown",
+      "source_project": "MARKDOWN",
+      "category": "Research",
+      "project_path": "",
+      "python_executable": "",
+      "entry_script": "",
+      "working_directory": "",
+      "enabled": false,
+      "timeout_seconds": 300
+    },
+    {
+      "tool_id": "quickforge_launcher",
+      "display_name": "QuickForge Launcher",
+      "description": "Tauri 脚本启动器",
+      "source_project": "QuickForge Launcher",
+      "category": "Automation",
+      "project_path": "",
+      "python_executable": "",
+      "entry_script": "",
+      "working_directory": "",
+      "enabled": false,
+      "timeout_seconds": 300
+    }
+  ]
+}

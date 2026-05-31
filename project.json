@@ -1,0 +1,368 @@
+{
+  "schemaVersion": "1.0",
+  "id": "y-scape",
+  "slug": "y-scape",
+  "title": "Y.Scape",
+  "subtitle": "Transactional Agent Runtime",
+  "category": "AI Runtime / Agent Infrastructure",
+  "status": "Completed",
+  "featured": true,
+  "priority": 1,
+
+  "links": {
+    "github": "https://github.com/yufan2116/y-scape",
+    "demo": "",
+    "docs": "https://github.com/yufan2116/y-scape/blob/master/docs/PORTFOLIO_CASE_STUDY.md",
+    "video": ""
+  },
+
+  "summary": {
+    "oneLine": "可观测、可恢复、带质量门禁的长任务 Agent Runtime（非 Chatbot）。",
+    "short": "以 Run 为单位的 Transactional Agent Runtime：状态机编排、Snapshot 热读、SSE Timeline、Artifact 沙盒、Checkpoint 恢复与 Demo Mode。",
+    "problem": "长任务 Agent 若只靠对话历史当状态，容易出现轮询猜状态、Tool 失败不可恢复、交付物无质量校验、刷新后 Timeline 丢失等问题。",
+    "solution": "Y.Scape 用显式 RunState、内存 Snapshot、JSONL 事件流、WAL Replay、Quality Gate 与 Native Tool Hub，把 Agent 执行做成可审计、可中断、可续跑的运行时系统。"
+  },
+
+  "role": {
+    "title": "Creator & Lead Developer",
+    "responsibilities": [
+      "设计 Phase 1–11 Runtime 状态机与 Run 生命周期 API",
+      "实现 Snapshot Cache、SSE Replay 与前端 Mission / Timeline / Recovery 控制台",
+      "集成 DeepSeek 规划/综合、Native Tools 与 Phase 11 E2E 验收"
+    ],
+    "contributions": [
+      "交付 Cancel / Retry / Resume / WAL Replay 完整恢复链路",
+      "Star-Rail 风格 sci-fi Dashboard + Tool Hub 原生工具面板",
+      "Demo Mode 与 pytest 多阶段回归（Phase 1–11）"
+    ]
+  },
+
+  "techStack": {
+    "frontend": ["React 19", "TypeScript", "Vite", "Lucide React", "react-markdown"],
+    "backend": ["Python 3.10+", "FastAPI", "asyncio", "Pydantic Settings"],
+    "ai": ["DeepSeek API", "Tool Calling", "Demo Mode Planner"],
+    "database": [],
+    "infra": ["SSE", "JSONL Event / WAL", "Snapshot Cache", "local filesystem sandbox"],
+    "tools": ["pytest", "GitHub", "Playwright (integrations)"]
+  },
+
+  "highlights": [
+    "Transactional Agent Runtime",
+    "Run State Machine",
+    "Snapshot Cache + SSE Replay",
+    "Quality Gate & Circuit Breaker",
+    "WAL Replay + Checkpoint Recovery",
+    "Native Tool Hub",
+    "Sci-fi Mission Dashboard"
+  ],
+
+  "features": [
+    "长任务 Agent Run（Planner → Tool → Artifact）",
+    "Mission Console + 实时 Timeline",
+    "Artifact Explorer 与 Markdown Preview",
+    "Cancel / Retry / Resume / Interrupt",
+    "Tool Hub：Markdown 转换、文件夹整理、GitHub Resume 等",
+    "DEMO_MODE 无 Key 稳定演示"
+  ],
+
+  "sections": [
+    {
+      "id": "background",
+      "title": "项目背景",
+      "type": "text",
+      "content": "Y.Scape 不是 Chatbot Demo，而是 **Transactional Agent Runtime**：任务以 Run 为单位，状态由 Snapshot + 事件日志权威维护，成功由 Quality Gate 判定而非模型停笔。当前仓库已完成 Phase 11（QA / 会话恢复 / E2E）。"
+    },
+    {
+      "id": "architecture",
+      "title": "系统架构",
+      "type": "architecture",
+      "content": {
+        "overview": "React Dashboard → Snapshot API / SSE → Run Manager → Agent Loop (Planner + Synthesis) → Tool Registry / Native Tools → Artifact Workspace + JSONL Audit",
+        "image": "architecture.png",
+        "modules": [
+          {
+            "name": "Frontend (Phase 9–11)",
+            "description": "Mission / Status / Timeline / Artifact / Recovery / Tool Hub / Settings"
+          },
+          {
+            "name": "Snapshot Cache",
+            "description": "GET /status 热读内存快照，高频轮询毫秒级"
+          },
+          {
+            "name": "Run Manager",
+            "description": "生命周期 · Cancel / Retry / Resume / Replay 决策"
+          },
+          {
+            "name": "Agent Loop",
+            "description": "DeepSeek 或 Demo Planner · 证据收集 · Synthesis · Quality Gate"
+          },
+          {
+            "name": "Tool System",
+            "description": "沙盒工具 + Integration Adapters + Native Tools API"
+          },
+          {
+            "name": "Persistence",
+            "description": "runs_active/{runId}：snapshot · wal · checkpoint · execution_log"
+          }
+        ]
+      }
+    },
+    {
+      "id": "technical-highlights",
+      "title": "技术亮点",
+      "type": "features",
+      "content": [
+        "显式 RunState 状态机，覆盖 planning / tool / artifact / terminal",
+        "Snapshot + SSE Event Replay，刷新页面可恢复 Timeline",
+        "WAL Replay Engine：从 wal.jsonl 重建 completed_steps 并 Resume",
+        "Deliverable Quality Gate：文件写入 ≠ 任务成功",
+        "Phase 10 Star-Rail 主题 HUD + Phase 9 七面板功能控制台",
+        "Phase 9 Native Tool Hub + 集成适配器（RAG / QuickForge 等 stub）"
+      ]
+    },
+    {
+      "id": "challenges",
+      "title": "技术挑战与解决方案",
+      "type": "challenges",
+      "content": [
+        {
+          "title": "状态不同步",
+          "problem": "前端轮询猜测阶段，刷新后 Timeline 丢失。",
+          "solution": "Snapshot 权威层 + SSE（断线 polling 回退）+ localStorage 会话恢复（Phase 11）。"
+        },
+        {
+          "title": "任务不可恢复",
+          "problem": "Tool 失败后只能全量重跑。",
+          "solution": "Checkpoint + WAL Replay + POST retry/resume，跳过已完成步骤。"
+        },
+        {
+          "title": "交付质量不可信",
+          "problem": "模型写完文件即宣称成功。",
+          "solution": "Quality Gate 与 circuit breaker，失败进入修订循环直至通过或阻断。"
+        }
+      ]
+    }
+  ],
+
+  "metrics": [
+    {
+      "label": "Phases",
+      "value": "1–11 ✅",
+      "description": "Runtime → Recovery → UI → Polish → QA",
+      "trend": "optimal"
+    },
+    {
+      "label": "Status API",
+      "value": "P95 < 100ms",
+      "description": "内存 Snapshot 热读（Case Study 目标）",
+      "trend": "optimal"
+    },
+    {
+      "label": "pytest",
+      "value": "80+",
+      "description": "backend/tests 多阶段回归",
+      "trend": "neutral"
+    },
+    {
+      "label": "Recovery",
+      "value": "WAL + Checkpoint",
+      "description": "cancel / retry / resume / replay",
+      "trend": "optimal"
+    }
+  ],
+
+  "media": {
+    "cover": "cover.png",
+    "hero": "hero.png",
+    "demo": "demo.gif",
+    "screenshots": [
+      {
+        "title": "Mission Dashboard",
+        "description": "Star-Rail 风格控制台：Mission、Run State、Timeline、Artifacts。",
+        "file": "screenshots/dashboard.png"
+      },
+      {
+        "title": "Timeline & Recovery",
+        "description": "SSE 事件流与 Cancel / Retry / Resume 操作。",
+        "file": "screenshots/timeline.png"
+      },
+      {
+        "title": "Tool Hub",
+        "description": "Native Tools：Markdown、文件夹整理、GitHub Resume 等。",
+        "file": "screenshots/tools.png"
+      }
+    ]
+  },
+
+  "demo": {
+    "available": true,
+    "mode": "DEMO_MODE=true",
+    "commands": [
+      "cd backend",
+      "set DEMO_MODE=true",
+      "uvicorn src.main:app --reload --port 8000",
+      "pytest tests/ -v"
+    ],
+    "scenarios": [
+      "note_md_demo",
+      "Quality Failure → Revision",
+      "Cancel / Retry / Resume",
+      "SSE Replay",
+      "Native Tool Hub 冒烟"
+    ]
+  },
+
+  "resumeBullets": {
+    "zh": [
+      "独立设计并实现 Y.Scape Transactional Agent Runtime：Run 状态机、Snapshot 热读、SSE Timeline、Artifact 沙盒与 Quality Gate。",
+      "实现 WAL Replay + Checkpoint 的 cancel/retry/resume 恢复链路，解决长任务中断与前后端状态不一致问题。",
+      "交付 React 19  sci-fi 控制台（Phase 9–11）、DeepSeek 规划/综合、Native Tool Hub 与多阶段 pytest 回归。"
+    ],
+    "en": [
+      "Built Y.Scape, a transactional long-running agent runtime with explicit run states, snapshot cache, SSE timeline, and artifact sandboxing.",
+      "Implemented WAL replay and checkpoint-based cancel/retry/resume for reliable recovery on tool failures.",
+      "Shipped a React 19 mission dashboard, DeepSeek planner/synthesis integration, native tool hub, and phased pytest coverage."
+    ]
+  },
+
+  "interview": {
+    "pitchZh": "Y.Scape 把 Agent 当成运行时而不是聊天：Run 有状态机，Snapshot 和事件日志让 Timeline 可回放，WAL 和 Checkpoint 让任务可恢复，Quality Gate 保证交付物真的合格。",
+    "pitchEn": "Y.Scape treats agents as a runtime, not chat: explicit run states, snapshot plus event logs for replayable timelines, WAL/checkpoint recovery, and a quality gate before success.",
+    "qa": []
+  },
+
+  "tags": [
+    "Y.Scape",
+    "Agent Runtime",
+    "SSE",
+    "Recovery",
+    "FastAPI",
+    "React",
+    "DeepSeek"
+  ],
+
+  "targetRoles": [
+    "AI Engineer",
+    "Backend Developer",
+    "Full-stack Developer",
+    "Agent Runtime Engineer"
+  ],
+
+  "runtime": {
+    "stateMachine": [
+      {
+        "state": "created",
+        "label": "Created",
+        "description": "Run 已创建，等待调度"
+      },
+      {
+        "state": "planning",
+        "label": "Planning",
+        "description": "Planner 生成下一步动作（DeepSeek 或 Demo）"
+      },
+      {
+        "state": "tool_running",
+        "label": "Tool Running",
+        "description": "沙盒 Tool 或 Integration Adapter 执行中",
+        "transitions": "writing_artifact | cancelled | retrying"
+      },
+      {
+        "state": "writing_artifact",
+        "label": "Writing Artifact",
+        "description": "写入 runs_active 下 Artifact Workspace"
+      },
+      {
+        "state": "success",
+        "label": "Success",
+        "description": "Quality Gate 通过，任务完成"
+      },
+      {
+        "state": "retrying",
+        "label": "Retrying",
+        "description": "失败后重试 Planner Loop"
+      },
+      {
+        "state": "recovering",
+        "label": "Recovering",
+        "description": "WAL Replay + Checkpoint 恢复",
+        "transitions": "planning | success"
+      },
+      {
+        "state": "cancelled",
+        "label": "Cancelled",
+        "description": "用户 Cancel 或 Watchdog 中断"
+      }
+    ],
+    "timeline": [
+      {
+        "id": "1",
+        "time": "00:00.000",
+        "type": "status",
+        "label": "Run created",
+        "status": "done"
+      },
+      {
+        "id": "2",
+        "time": "00:00.120",
+        "type": "thinking",
+        "label": "Planner analyzing task context",
+        "status": "done"
+      },
+      {
+        "id": "3",
+        "time": "00:01.450",
+        "type": "tool",
+        "label": "tool:collect_evidence",
+        "detail": "research pipeline",
+        "status": "done"
+      },
+      {
+        "id": "4",
+        "time": "00:03.200",
+        "type": "artifact",
+        "label": "artifact:research_report.md",
+        "detail": "Quality gate check",
+        "status": "running"
+      },
+      {
+        "id": "5",
+        "time": "—",
+        "type": "status",
+        "label": "Awaiting quality_check_passed",
+        "status": "pending"
+      }
+    ],
+    "recovery": [
+      {
+        "id": "cancel",
+        "title": "Cancel",
+        "description": "协作式中断 Run，状态 → cancelled。",
+        "icon": "XCircle"
+      },
+      {
+        "id": "retry",
+        "title": "Retry",
+        "description": "FAILED / QUALITY_BLOCKED 等状态下重试。",
+        "icon": "RotateCcw"
+      },
+      {
+        "id": "resume",
+        "title": "Resume",
+        "description": "WAL Replay 后从 Checkpoint 续跑 Agent Loop。",
+        "icon": "Play"
+      },
+      {
+        "id": "watchdog",
+        "title": "Watchdog",
+        "description": "stale 检测与自动恢复策略。",
+        "icon": "Shield"
+      },
+      {
+        "id": "checkpoint",
+        "title": "Checkpoint",
+        "description": "持久化 snapshot + wal，支持跨会话恢复。",
+        "icon": "Bookmark"
+      }
+    ]
+  }
+}

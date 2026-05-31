@@ -1,0 +1,269 @@
+/**
+ * Agent Profile Card — compact Star-Rail sidebar role card
+ */
+
+.agent-profile-card {
+  --apc-gold: rgba(214, 180, 105, 0.38);
+  --apc-gold-bright: rgba(214, 180, 105, 0.55);
+
+  position: relative;
+  flex-shrink: 0;
+  height: 230px;
+  margin-top: auto;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+  overflow: hidden;
+  border: 1px solid var(--apc-gold);
+  border-radius: 8px;
+  background:
+    radial-gradient(ellipse 80% 65% at 50% 0%, rgba(90, 140, 255, 0.12) 0%, transparent 62%),
+    linear-gradient(168deg, rgba(8, 12, 30, 0.92) 0%, rgba(4, 8, 22, 0.96) 100%);
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.34),
+    inset 0 0 50px rgba(40, 80, 180, 0.06);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.agent-profile-card:hover {
+  border-color: var(--apc-gold-bright);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.38),
+    0 0 24px rgba(90, 140, 255, 0.08),
+    inset 0 0 60px rgba(40, 80, 180, 0.07);
+}
+
+/* ── Avatar ── */
+.agent-profile-card__avatar-section {
+  flex: 0 0 105px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+}
+
+.agent-avatar-frame {
+  position: relative;
+  width: 92px;
+  height: 92px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.agent-avatar-orbit {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.agent-avatar-orbit--outer {
+  inset: -8px;
+  border: 1px solid rgba(77, 238, 234, 0.16);
+  animation: agent-orbit-spin 28s linear infinite;
+}
+
+.agent-avatar-orbit--inner {
+  inset: -3px;
+  border: 1px dashed rgba(214, 180, 105, 0.34);
+  animation: agent-orbit-spin 18s linear infinite reverse;
+}
+
+.agent-avatar-orbit__core {
+  position: relative;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid rgba(214, 180, 105, 0.4);
+  box-shadow:
+    0 0 20px rgba(90, 140, 255, 0.2),
+    inset 0 0 16px rgba(40, 80, 180, 0.14);
+  background: radial-gradient(circle at 35% 30%, rgba(90, 140, 255, 0.22), rgba(8, 12, 28, 0.92) 70%);
+}
+
+.agent-avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+.agent-avatar-placeholder {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 50% 35%, rgba(120, 160, 255, 0.3) 0%, transparent 55%),
+    linear-gradient(180deg, rgba(12, 18, 40, 0.55) 0%, rgba(6, 10, 24, 0.95) 100%);
+}
+
+.agent-avatar-placeholder__silhouette {
+  width: 20px;
+  height: 26px;
+  border-radius: 50% 50% 42% 42%;
+  background: linear-gradient(180deg, rgba(200, 220, 255, 0.5) 0%, rgba(120, 150, 210, 0.32) 100%);
+  box-shadow: 0 0 12px rgba(127, 215, 255, 0.28);
+  position: relative;
+  z-index: 1;
+}
+
+.agent-avatar-placeholder__silhouette::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, rgba(210, 225, 255, 0.55) 0%, rgba(130, 160, 220, 0.38) 100%);
+  box-shadow: 0 0 8px rgba(127, 215, 255, 0.25);
+}
+
+.agent-avatar-placeholder__glow {
+  position: absolute;
+  inset: 10px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(127, 215, 255, 0.14) 0%, transparent 70%);
+  animation: agent-avatar-pulse 3s ease-in-out infinite;
+}
+
+@keyframes agent-orbit-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes agent-avatar-pulse {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+
+/* ── Identity ── */
+.agent-profile-card__identity {
+  flex: 0 0 auto;
+  min-width: 0;
+  text-align: center;
+}
+
+.agent-profile-name {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #f2f6ff;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.agent-profile-type {
+  margin: 2px 0 0;
+  font-size: 0.54rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.36);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Status chips ── */
+.agent-status-chips {
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+  min-width: 0;
+}
+
+.agent-status-chips--compact {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.agent-status-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  min-width: 0;
+  padding: 4px 6px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(125, 170, 255, 0.1);
+}
+
+.agent-status-chip__label {
+  font-size: 0.52rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(150, 175, 210, 0.72);
+  line-height: 1.1;
+}
+
+.agent-status-chip__value {
+  font-size: 0.62rem;
+  font-family: var(--sr-font-mono);
+  letter-spacing: 0.02em;
+  line-height: 1.15;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.agent-status-chip__value--cyan {
+  color: #7fd7ff;
+}
+
+.agent-status-chip__value--gold {
+  color: #d6b469;
+}
+
+.agent-status-chip__value--health-stable {
+  color: #6ee7b7;
+}
+
+.agent-status-chip__value--health-warning {
+  color: #fbbf24;
+}
+
+.agent-status-chip__value--health-error {
+  color: #f87171;
+}
+
+/* ── Quote ── */
+.agent-profile-quote {
+  flex: 0 0 auto;
+  margin: auto 0 0;
+  padding-top: 4px;
+  font-size: 0.58rem;
+  line-height: 1.2;
+  font-style: italic;
+  letter-spacing: 0.03em;
+  color: rgba(180, 200, 230, 0.55);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 240px) {
+  .agent-status-chips:not(.agent-status-chips--compact) {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .agent-status-chips:not(.agent-status-chips--compact) .agent-status-chip:first-child {
+    display: none;
+  }
+}

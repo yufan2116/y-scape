@@ -1,0 +1,138 @@
+/**
+ * View placeholder + sidebar nav interaction
+ */
+
+button.ref-nav-btn {
+  width: 100%;
+  margin: 0;
+  padding: 0.42rem 0.5rem;
+  font: inherit;
+  font-size: 0.8rem;
+  color: inherit;
+  text-align: left;
+  background: none;
+  cursor: pointer;
+  box-shadow: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+button.ref-nav-btn:focus-visible {
+  outline: 2px solid rgba(77, 238, 234, 0.45);
+  outline-offset: 1px;
+}
+
+button.ref-nav-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ── Placeholder panel ── */
+.view-placeholder {
+  flex: 1;
+  min-height: 0;
+  margin: 0;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.view-placeholder__head {
+  flex-shrink: 0;
+  margin-bottom: 1rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.view-placeholder__body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem 1.5rem;
+  border-radius: 10px;
+  border: 1px dashed rgba(125, 170, 255, 0.16);
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 20%, rgba(90, 140, 255, 0.08), transparent 62%),
+    rgba(255, 255, 255, 0.02);
+}
+
+.view-placeholder__icon {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.view-placeholder__icon-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px dashed rgba(214, 180, 105, 0.35);
+  animation: view-placeholder-spin 24s linear infinite;
+}
+
+.view-placeholder__icon-core {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid rgba(125, 170, 255, 0.28);
+  background: rgba(90, 130, 255, 0.12);
+  box-shadow: inset 0 0 20px rgba(90, 140, 255, 0.1);
+}
+
+@keyframes view-placeholder-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.view-placeholder__headline {
+  margin: 0 0 0.65rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #f2f6ff;
+  letter-spacing: 0.03em;
+}
+
+.view-placeholder__desc {
+  margin: 0;
+  max-width: 420px;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.view-placeholder__hint {
+  margin: 0.75rem 0 0;
+  max-width: 400px;
+  font-size: 0.75rem;
+  line-height: 1.55;
+  color: rgba(150, 175, 210, 0.72);
+}
+
+.view-placeholder__status {
+  margin: 1.25rem 0 0;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(180, 200, 230, 0.38);
+}
+
+.aos-main-view {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.aos-main-view--placeholder {
+  gap: var(--aos-gap, 10px);
+}

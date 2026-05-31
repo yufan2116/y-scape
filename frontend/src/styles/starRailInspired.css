@@ -1,0 +1,640 @@
+/**
+ * Star-Rail-inspired Mission Brief + Run State HUD cards
+ * Phase 11-B — alignment + orbit planet polish
+ */
+
+/* ── Grid row (wrapper class unchanged in MissionObjectiveRow) ── */
+.sr-brief-row {
+  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: 16px;
+  align-items: stretch;
+}
+
+/* ── Shared HUD panel shell ── */
+.hud-panel {
+  --hud-gold: rgba(214, 180, 105, 0.35);
+  --hud-gold-line: rgba(214, 180, 105, 0.55);
+
+  position: relative;
+  height: 184px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--hud-gold);
+  border-radius: 6px;
+  background:
+    radial-gradient(ellipse 75% 85% at 12% 18%, rgba(61, 124, 255, 0.11) 0%, transparent 58%),
+    radial-gradient(ellipse 55% 65% at 88% 82%, rgba(139, 124, 247, 0.09) 0%, transparent 52%),
+    linear-gradient(158deg, rgba(9, 13, 30, 0.9) 0%, rgba(5, 8, 20, 0.94) 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow:
+    0 4px 22px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.hud-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(214, 180, 105, 0.14) 0,
+    rgba(214, 180, 105, 0.14) 1px,
+    transparent 1px
+  );
+}
+
+/* HUD corners */
+.hud-panel__corner {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.hud-panel__corner--tl {
+  top: 5px;
+  left: 5px;
+  border-top: 1px solid var(--hud-gold-line);
+  border-left: 1px solid var(--hud-gold-line);
+}
+
+.hud-panel__corner--tr {
+  top: 5px;
+  right: 5px;
+  border-top: 1px solid var(--hud-gold-line);
+  border-right: 1px solid var(--hud-gold-line);
+}
+
+.hud-panel__corner--bl {
+  bottom: 5px;
+  left: 5px;
+  border-bottom: 1px solid rgba(214, 180, 105, 0.42);
+  border-left: 1px solid rgba(214, 180, 105, 0.42);
+}
+
+.hud-panel__corner--br {
+  bottom: 5px;
+  right: 5px;
+  border-bottom: 1px solid rgba(214, 180, 105, 0.42);
+  border-right: 1px solid rgba(214, 180, 105, 0.42);
+}
+
+.hud-panel__decor {
+  position: absolute;
+  top: 18px;
+  right: 20px;
+  font-size: 0.52rem;
+  letter-spacing: 0.1em;
+  color: rgba(100, 116, 139, 0.42);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Panel header (fixed height both cards) ── */
+.hud-panel__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+  flex-shrink: 0;
+  height: 36px;
+  min-height: 36px;
+  margin-bottom: 0;
+}
+
+.hud-panel__diamond {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(214, 180, 105, 0.48);
+  transform: rotate(45deg);
+  background: rgba(214, 180, 105, 0.08);
+  box-shadow: 0 0 8px rgba(214, 180, 105, 0.14);
+}
+
+.hud-panel__diamond::before {
+  content: "";
+  width: 4px;
+  height: 4px;
+  background: #d6b469;
+  border-radius: 1px;
+}
+
+.hud-panel__titles {
+  min-width: 0;
+}
+
+.hud-panel__title {
+  margin: 0;
+  font-size: 0.94rem;
+  font-weight: 600;
+  color: #f0f4ff;
+  letter-spacing: 0.04em;
+  line-height: 1.15;
+}
+
+.hud-panel__subtitle {
+  display: block;
+  margin-top: 0.12rem;
+  font-size: 0.56rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(122, 143, 168, 0.88);
+}
+
+/* ── Panel body ── */
+.hud-panel__body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* ── Mission panel content ── */
+.hud-panel--mission .hud-panel__body {
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.hud-panel__main {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+}
+
+.hud-panel__brief {
+  min-height: 0;
+}
+
+.hud-panel__brief-text {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: rgba(226, 232, 240, 0.93);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.hud-panel--mission:not(:has(.hud-panel__launch)) .hud-panel__brief-text {
+  -webkit-line-clamp: 3;
+}
+
+.hud-panel__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.hud-capsule {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  font-size: 0.58rem;
+  padding: 0.12rem 0.44rem 0.12rem 0.36rem;
+  border-radius: 999px;
+  border: 1px solid;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.hud-capsule__icon {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  opacity: 0.65;
+  flex-shrink: 0;
+}
+
+.hud-capsule__icon--sq { border-radius: 2px; }
+.hud-capsule__icon--node { border-radius: 0; transform: rotate(45deg) scale(0.7); }
+.hud-capsule__icon--tri {
+  border: none;
+  border-radius: 1px;
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  background: currentColor;
+  opacity: 0.5;
+}
+
+.hud-capsule--blue {
+  color: #93c5fd;
+  border-color: rgba(61, 124, 255, 0.42);
+  background: rgba(61, 124, 255, 0.11);
+}
+
+.hud-capsule--purple {
+  color: #c4b5fd;
+  border-color: rgba(88, 68, 140, 0.48);
+  background: rgba(74, 58, 120, 0.2);
+}
+
+.hud-capsule--violet {
+  color: #d8b4fe;
+  border-color: rgba(139, 124, 247, 0.42);
+  background: rgba(139, 124, 247, 0.11);
+}
+
+.hud-capsule--gold {
+  color: #e8c98a;
+  border-color: rgba(214, 180, 105, 0.42);
+  background: rgba(214, 180, 105, 0.09);
+}
+
+/* Launch strip — compressed 32px controls */
+.hud-panel__launch {
+  flex-shrink: 0;
+}
+
+.hud-panel__launch .sr-launch-hud {
+  margin: 0;
+}
+
+.hud-panel__launch .sr-launch-error,
+.hud-panel__launch .sr-launch-hint {
+  margin: 0 0 4px;
+  font-size: 0.62rem;
+  line-height: 1.2;
+}
+
+.hud-panel__launch .sr-launch-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.hud-panel__launch .sr-launch-select,
+.hud-panel__launch .sr-launch-input {
+  flex: 1;
+  min-width: 0;
+  height: 32px;
+  padding: 0 10px;
+  font-size: 0.68rem;
+  line-height: 32px;
+  color: #e2e8f0;
+  background: rgba(4, 8, 18, 0.78);
+  border: 1px solid rgba(214, 180, 105, 0.22);
+  border-radius: 4px;
+  outline: none;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.28);
+}
+
+.hud-panel__launch .sr-launch-btn {
+  flex-shrink: 0;
+  height: 32px;
+  padding: 0 12px;
+  font-size: 0.68rem;
+  line-height: 1;
+  color: #f0f4ff;
+  background: linear-gradient(135deg, rgba(61, 124, 255, 0.72) 0%, rgba(139, 124, 247, 0.62) 100%);
+  border: 1px solid rgba(79, 172, 254, 0.38);
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(79, 172, 254, 0.12);
+}
+
+.hud-panel__launch .sr-launch-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── Run State panel body ── */
+.hud-panel__body--state {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.hud-panel__state-text {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.hud-panel__state-primary {
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 500;
+  line-height: 1.45;
+  color: #eef2ff;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.hud-panel__state-secondary {
+  margin: 0.3rem 0 0;
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  color: rgba(122, 143, 168, 0.92);
+  font-family: var(--sr-font-mono);
+}
+
+.hud-panel__state-visual {
+  flex: 0 0 180px;
+  width: 180px;
+  height: 118px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Orbit Planet — premium star-track visual ── */
+.orbit-planet {
+  position: relative;
+  width: 180px;
+  height: 118px;
+  flex: 0 0 180px;
+  display: grid;
+  place-items: center;
+  perspective: 420px;
+  filter: drop-shadow(0 0 22px rgba(71, 160, 255, 0.28));
+}
+
+.orbit-glow {
+  position: absolute;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(88, 180, 255, 0.28), transparent 68%);
+  filter: blur(10px);
+  animation: op-glow-breathe 7s ease-in-out infinite;
+}
+
+.planet-core {
+  position: relative;
+  z-index: 4;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255, 232, 160, 0.95), transparent 18%),
+    radial-gradient(circle at 48% 42%, #8fe9ff 0%, #4b9dff 38%, #5f4fd6 72%, #24184e 100%);
+  box-shadow:
+    0 0 18px rgba(110, 210, 255, 0.65),
+    0 0 42px rgba(82, 105, 255, 0.35),
+    inset -10px -12px 22px rgba(24, 18, 70, 0.55),
+    inset 8px 6px 16px rgba(255, 236, 170, 0.32);
+}
+
+.orbit-ring {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  border-style: solid;
+  border-width: 1px;
+}
+
+.ring-main {
+  width: 150px;
+  height: 44px;
+  transform: rotate(-10deg) rotateX(62deg);
+  border-color: rgba(226, 190, 112, 0.42);
+  box-shadow: 0 0 8px rgba(226, 190, 112, 0.12);
+  animation: op-ring-drift-1 48s linear infinite;
+}
+
+.ring-secondary {
+  width: 126px;
+  height: 36px;
+  transform: rotate(18deg) rotateX(64deg);
+  border-color: rgba(90, 174, 255, 0.38);
+  box-shadow: 0 0 10px rgba(90, 174, 255, 0.15);
+  animation: op-ring-drift-2 62s linear infinite reverse;
+}
+
+.ring-ghost {
+  width: 172px;
+  height: 52px;
+  transform: rotate(-24deg) rotateX(66deg);
+  border-color: rgba(255, 255, 255, 0.16);
+  animation: op-ring-drift-3 74s linear infinite;
+}
+
+/* Dot tracks — rotate slowly so dots travel along rings */
+.orbit-track {
+  position: absolute;
+  border-radius: 50%;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.track-main {
+  width: 150px;
+  height: 44px;
+  transform: rotate(-10deg) rotateX(62deg);
+  animation: op-ring-drift-1 48s linear infinite;
+}
+
+.track-secondary {
+  width: 126px;
+  height: 36px;
+  transform: rotate(18deg) rotateX(64deg);
+  animation: op-ring-drift-2 62s linear infinite reverse;
+}
+
+.track-ghost {
+  width: 172px;
+  height: 52px;
+  transform: rotate(-24deg) rotateX(66deg);
+  animation: op-ring-drift-3 74s linear infinite;
+}
+
+.orbit-dot {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow:
+    0 0 6px rgba(143, 233, 255, 0.95),
+    0 0 14px rgba(90, 174, 255, 0.55);
+}
+
+.dot-a {
+  top: 0;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  margin: -2px 0 0 -2px;
+}
+
+.dot-b {
+  bottom: 0;
+  right: 22%;
+  width: 4px;
+  height: 4px;
+  margin: 0 -2px -2px 0;
+  opacity: 0.85;
+}
+
+.dot-c {
+  top: 38%;
+  left: 4%;
+  width: 3px;
+  height: 3px;
+  margin: -1px 0 0 -1px;
+  opacity: 0.55;
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.6);
+}
+
+/* Star dust particles */
+.star-particle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.75);
+  pointer-events: none;
+}
+
+.p1 {
+  width: 2px;
+  height: 2px;
+  top: 18%;
+  left: 12%;
+  opacity: 0.25;
+  animation: op-sparkle 5s ease-in-out infinite;
+}
+
+.p2 {
+  width: 1.5px;
+  height: 1.5px;
+  top: 72%;
+  left: 28%;
+  opacity: 0.18;
+  animation: op-sparkle 7s ease-in-out infinite 1.2s;
+}
+
+.p3 {
+  width: 2px;
+  height: 2px;
+  top: 42%;
+  right: 8%;
+  opacity: 0.2;
+  animation: op-sparkle 6s ease-in-out infinite 2.4s;
+}
+
+@keyframes op-glow-breathe {
+  0%, 100% { opacity: 0.65; transform: scale(0.96); }
+  50% { opacity: 1; transform: scale(1.04); }
+}
+
+@keyframes op-ring-drift-1 {
+  from { transform: rotate(-10deg) rotateX(62deg) rotate(0deg); }
+  to { transform: rotate(-10deg) rotateX(62deg) rotate(360deg); }
+}
+
+@keyframes op-ring-drift-2 {
+  from { transform: rotate(18deg) rotateX(64deg) rotate(0deg); }
+  to { transform: rotate(18deg) rotateX(64deg) rotate(360deg); }
+}
+
+@keyframes op-ring-drift-3 {
+  from { transform: rotate(-24deg) rotateX(66deg) rotate(0deg); }
+  to { transform: rotate(-24deg) rotateX(66deg) rotate(360deg); }
+}
+
+@keyframes op-sparkle {
+  0%, 100% { opacity: 0.12; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(1.3); }
+}
+
+/* ── Responsive ── */
+@media (max-width: 1366px) {
+  .sr-brief-row {
+    gap: 14px;
+  }
+
+  .hud-panel {
+    height: 178px;
+    padding: 16px 18px;
+  }
+
+  .hud-panel__brief-text {
+    font-size: 0.76rem;
+  }
+
+  .hud-capsule {
+    font-size: 0.55rem;
+  }
+
+  .hud-panel__state-visual {
+    flex: 0 0 160px;
+    width: 160px;
+  }
+
+  .orbit-planet {
+    width: 160px;
+    height: 106px;
+    flex: 0 0 160px;
+  }
+
+  .planet-core {
+    width: 44px;
+    height: 44px;
+  }
+
+  .ring-main { width: 132px; height: 38px; }
+  .ring-secondary { width: 112px; height: 32px; }
+  .ring-ghost { width: 152px; height: 46px; }
+  .track-main { width: 132px; height: 38px; }
+  .track-secondary { width: 112px; height: 32px; }
+  .track-ghost { width: 152px; height: 46px; }
+}
+
+@media (max-width: 1100px) {
+  .sr-brief-row {
+    grid-template-columns: 1fr;
+  }
+
+  .hud-panel {
+    height: auto;
+    min-height: 178px;
+  }
+}
+
+/* Legacy launch styles (MissionComposer hud variant) */
+.sr-launch-hud {
+  margin-top: 0;
+}
+
+.sr-launch-error {
+  color: var(--sr-danger);
+}
+
+.sr-launch-hint {
+  color: var(--sr-text-muted);
+}
+
+.sr-launch-select:focus,
+.sr-launch-input:focus {
+  border-color: rgba(79, 172, 254, 0.45);
+  box-shadow: 0 0 8px rgba(79, 172, 254, 0.12);
+}
+
+.sr-launch-select option {
+  background: #0a0e1a;
+  color: #e2e8f0;
+}
+
+.sr-launch-btn:hover:not(:disabled) {
+  box-shadow: 0 0 12px rgba(79, 172, 254, 0.22);
+}

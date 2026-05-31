@@ -1,0 +1,847 @@
+/* Phase 11-A — Sci-Fi Agent OS Information Architecture */
+
+.aos-app {
+  --aos-sidebar-w: 15%;
+  --aos-sidebar-min: 220px;
+  --aos-artifact-w: 30%;
+  --aos-gap: 10px;
+}
+
+/* ── Starfield background ── */
+.aos-stars {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    radial-gradient(1px 1px at 10% 20%, rgba(255, 255, 255, 0.45) 0%, transparent 100%),
+    radial-gradient(1px 1px at 30% 65%, rgba(255, 255, 255, 0.35) 0%, transparent 100%),
+    radial-gradient(1px 1px at 55% 15%, rgba(255, 255, 255, 0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 72% 42%, rgba(255, 255, 255, 0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 88% 78%, rgba(255, 255, 255, 0.25) 0%, transparent 100%),
+    radial-gradient(1px 1px at 15% 88%, rgba(255, 255, 255, 0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 45% 50%, rgba(77, 238, 234, 0.35) 0%, transparent 100%),
+    radial-gradient(1px 1px at 92% 12%, rgba(201, 160, 99, 0.3) 0%, transparent 100%);
+  opacity: 0.7;
+}
+
+.aos-grid-lines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    linear-gradient(90deg, rgba(77, 238, 234, 0.03) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(77, 238, 234, 0.03) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 20%, transparent 75%);
+}
+
+/* ── Shell: sidebar + main ── */
+.aos-shell {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(var(--aos-sidebar-min), var(--aos-sidebar-w)) 1fr;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+}
+
+.aos-main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  padding: var(--aos-gap) var(--aos-gap) var(--aos-gap) 0;
+  gap: var(--aos-gap);
+}
+
+/* ── Sidebar enhancements ── */
+.aos-sidebar {
+  margin: var(--aos-gap) 0 var(--aos-gap) var(--aos-gap);
+  height: calc(100vh - var(--aos-gap) * 2);
+  background: rgba(8, 12, 28, 0.82);
+  border: 1px solid rgba(201, 160, 99, 0.32);
+  box-shadow:
+    0 0 30px rgba(201, 160, 99, 0.06),
+    inset 0 0 60px rgba(77, 238, 234, 0.03);
+}
+
+.aos-sidebar .ref-nav-item {
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.aos-sidebar .ref-nav-item.active {
+  box-shadow:
+    0 0 20px rgba(201, 160, 99, 0.18),
+    inset 0 0 24px rgba(201, 160, 99, 0.06);
+}
+
+.aos-sidebar .ref-nav-icon {
+  filter: drop-shadow(0 0 4px rgba(77, 238, 234, 0.4));
+}
+
+.aos-avatar-orbit {
+  position: relative;
+}
+
+.aos-avatar-orbit::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border: 1px dashed rgba(201, 160, 99, 0.35);
+  border-radius: 50%;
+  animation: aos-orbit-spin 24s linear infinite;
+}
+
+.aos-avatar-orbit::after {
+  content: "";
+  position: absolute;
+  inset: -12px;
+  border: 1px solid rgba(77, 238, 234, 0.15);
+  border-radius: 50%;
+}
+
+@keyframes aos-orbit-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ── Mission HUD Header ── */
+.aos-mission-header {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.75rem 1rem;
+}
+
+.aos-mission-header .ref-mission-top {
+  align-items: center;
+  margin-bottom: 0.65rem;
+}
+
+.aos-mission-header .ref-mission-id::before {
+  content: "任务 · ";
+  font-size: 0.75rem;
+  color: var(--sr-text-muted);
+  font-weight: 400;
+}
+
+.aos-header-actions {
+  display: flex;
+  gap: 0.45rem;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.aos-btn-pause {
+  background: transparent;
+  border-color: var(--sr-gold-dim);
+  color: var(--sr-gold-bright);
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.aos-metric-bar .progress-bar div {
+  background: var(--sr-gradient-progress);
+}
+
+.aos-metric .label {
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+}
+
+/* ── Objective row ── */
+.aos-objective-row {
+  flex-shrink: 0;
+  margin: 0;
+  grid-template-columns: 45% 1fr;
+}
+
+.aos-objective-card {
+  position: relative;
+}
+
+.aos-objective-card::after {
+  content: "OBJ-01 // MISSION BRIEF";
+  position: absolute;
+  bottom: 6px;
+  right: 10px;
+  font-size: 0.52rem;
+  letter-spacing: 0.1em;
+  color: rgba(100, 116, 139, 0.5);
+  pointer-events: none;
+}
+
+.aos-state-card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto 1fr auto;
+  align-items: center;
+  text-align: left;
+  gap: 0 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.aos-state-card .ref-section-label {
+  grid-column: 1 / -1;
+}
+
+.aos-state-card .ref-state-title {
+  grid-column: 1;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  margin: 0;
+  text-align: left;
+}
+
+.aos-state-card .ref-state-step {
+  grid-column: 1;
+  text-align: left;
+}
+
+.aos-state-card .ref-planet-scene {
+  grid-column: 2;
+  grid-row: 2 / 4;
+  width: 120px;
+  height: 120px;
+  margin: 0;
+}
+
+.aos-waveform {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  opacity: 0.25;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 8px,
+    rgba(77, 238, 234, 0.15) 8px,
+    rgba(77, 238, 234, 0.15) 9px
+  );
+  mask-image: linear-gradient(180deg, transparent, black);
+}
+
+.aos-state-card .ref-planet-core {
+  box-shadow:
+    0 0 30px rgba(77, 238, 234, 0.45),
+    0 0 60px rgba(201, 160, 99, 0.15);
+}
+
+/* ── Workspace grid ── */
+.aos-workspace {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(240px, 22%) 1fr minmax(280px, var(--aos-artifact-w));
+  gap: var(--aos-gap);
+  overflow: hidden;
+}
+
+.aos-workspace > * {
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ── Timeline ── */
+.aos-timeline {
+  padding: 0.85rem 0.75rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.aos-timeline .ref-step {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  gap: 0.5rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: 6px;
+  margin-bottom: 0.15rem;
+  transition: background 0.2s;
+  align-items: start;
+}
+
+.aos-timeline .ref-step-active {
+  background: rgba(77, 238, 234, 0.08);
+  border: 1px solid rgba(77, 238, 234, 0.2);
+  box-shadow: 0 0 16px rgba(77, 238, 234, 0.1);
+}
+
+.aos-timeline .ref-step-done {
+  opacity: 1;
+}
+
+.aos-timeline .ref-step-pending {
+  opacity: 0.55;
+}
+
+.aos-step-rail {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.aos-step-rail::after {
+  content: "";
+  position: absolute;
+  top: 16px;
+  bottom: -8px;
+  width: 2px;
+  background: linear-gradient(180deg, rgba(77, 238, 234, 0.4), rgba(100, 116, 139, 0.15));
+}
+
+.aos-timeline .ref-step:last-child .aos-step-rail::after {
+  display: none;
+}
+
+.aos-step-badge {
+  display: inline-block;
+  font-size: 0.58rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+  letter-spacing: 0.04em;
+  margin-top: 0.2rem;
+  border: 1px solid;
+}
+
+.aos-step-badge-done {
+  color: var(--sr-success);
+  border-color: rgba(74, 222, 128, 0.35);
+  background: rgba(74, 222, 128, 0.08);
+}
+
+.aos-step-badge-active {
+  color: var(--sr-cyan);
+  border-color: var(--sr-cyan-dim);
+  background: rgba(77, 238, 234, 0.08);
+}
+
+.aos-step-badge-pending {
+  color: var(--sr-text-muted);
+  border-color: rgba(100, 116, 139, 0.35);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.aos-step-badge-failed {
+  color: var(--sr-danger);
+  border-color: rgba(248, 113, 113, 0.4);
+  background: rgba(248, 113, 113, 0.08);
+}
+
+.aos-step-result {
+  font-size: 0.62rem;
+  color: var(--sr-success);
+  margin-left: 0.35rem;
+  font-family: var(--sr-font-mono);
+}
+
+/* ── Agent Thinking column ── */
+.aos-agent-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--aos-gap);
+  min-height: 0;
+}
+
+.aos-thinking-panel {
+  flex: 1.2;
+  min-height: 0;
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.aos-thinking-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.aos-thought-meta-row {
+  display: flex;
+  gap: 0.75rem;
+  font-size: 0.68rem;
+  color: var(--sr-text-muted);
+  font-family: var(--sr-font-mono);
+}
+
+.aos-thought-meta-row strong {
+  color: var(--sr-cyan);
+}
+
+.aos-terminal {
+  flex: 1;
+  min-height: 120px;
+  overflow-y: auto;
+  padding: 0.85rem 1rem;
+  margin: 0.35rem 0;
+  background: rgba(4, 8, 20, 0.65);
+  border: 1px solid rgba(201, 160, 99, 0.22);
+  border-radius: 8px;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.35);
+}
+
+.aos-terminal-label {
+  font-size: 0.62rem;
+  color: var(--sr-gold);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+}
+
+.aos-thought-text {
+  margin: 0 0 0.75rem;
+  font-size: 0.92rem;
+  line-height: 1.7;
+  color: var(--sr-text-primary);
+}
+
+.aos-findings {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: 0.82rem;
+  color: var(--sr-text-secondary);
+}
+
+.aos-findings li {
+  margin-bottom: 0.25rem;
+}
+
+.aos-next-step {
+  margin-top: 0.65rem;
+  padding-top: 0.55rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 0.8rem;
+  color: var(--sr-text-muted);
+}
+
+.aos-next-step strong {
+  color: var(--sr-purple);
+}
+
+/* ── Tool Calls panel ── */
+.aos-tools-panel {
+  flex: 0.8;
+  min-height: 0;
+  padding: 0.75rem 1rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.aos-tool-queue {
+  list-style: none;
+  margin: 0.35rem 0 0;
+  padding: 0;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.aos-tool-queue li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.45rem 0.6rem;
+  margin-bottom: 0.3rem;
+  border-radius: 6px;
+  border: 1px solid rgba(100, 116, 139, 0.15);
+  background: rgba(0, 0, 0, 0.25);
+  font-size: 0.82rem;
+}
+
+.aos-tool-queue li.aos-tool-running {
+  border-color: rgba(77, 238, 234, 0.35);
+  background: rgba(77, 238, 234, 0.08);
+  box-shadow: 0 0 12px rgba(77, 238, 234, 0.12);
+}
+
+.aos-tool-queue li.aos-tool-waiting {
+  opacity: 0.5;
+}
+
+.aos-tool-queue .sr-tool-name {
+  font-family: var(--sr-font-mono);
+}
+
+.aos-tool-status {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.aos-tool-arrow {
+  color: var(--sr-text-muted);
+  font-size: 0.75rem;
+}
+
+.aos-file-list {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+/* ── Memory inline ── */
+.aos-memory-inline {
+  flex-shrink: 0;
+  padding-top: 0.55rem;
+  margin-top: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.aos-memory-inline .label {
+  margin-bottom: 0.35rem;
+}
+
+.aos-memory-segments {
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+  position: relative;
+}
+
+.aos-memory-segments .aos-memory-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3d7cff, #4deeea 40%, #8b7cf7 70%, #c9a063);
+  box-shadow: 0 0 8px rgba(77, 238, 234, 0.3);
+  transition: width 0.35s ease;
+}
+
+.aos-memory-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.3rem;
+  font-size: 0.65rem;
+  color: var(--sr-text-muted);
+  font-family: var(--sr-font-mono);
+}
+
+/* ── Artifact column (vertical split) ── */
+.aos-artifact-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--aos-gap);
+  min-height: 0;
+}
+
+.aos-artifacts-panel {
+  flex: 0.45;
+  min-height: 0;
+  padding: 0.75rem 0.85rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.aos-artifacts-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.aos-view-all {
+  font-size: 0.65rem;
+  background: none;
+  border: none;
+  color: var(--sr-cyan);
+  padding: 0;
+  cursor: pointer;
+  box-shadow: none;
+  letter-spacing: 0.04em;
+}
+
+.aos-view-all:hover {
+  color: var(--sr-gold-bright);
+  box-shadow: none;
+}
+
+.aos-file-card {
+  display: grid;
+  grid-template-columns: 28px 1fr auto auto;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.5rem;
+  margin-bottom: 0.3rem;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.aos-file-card:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.aos-file-card.active {
+  background: rgba(77, 238, 234, 0.06);
+  border-color: rgba(77, 238, 234, 0.25);
+}
+
+.aos-file-meta {
+  font-size: 0.62rem;
+  color: var(--sr-text-muted);
+}
+
+.aos-file-preview-btn {
+  background: none;
+  border: none;
+  padding: 0.15rem 0.35rem;
+  font-size: 0.85rem;
+  color: var(--sr-text-muted);
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.aos-file-preview-btn:hover {
+  color: var(--sr-cyan);
+  box-shadow: none;
+}
+
+.aos-preview-panel {
+  flex: 0.55;
+  min-height: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.aos-preview-chrome {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.45rem 0.75rem;
+  background: rgba(0, 0, 0, 0.35);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.aos-preview-chrome .panel-title {
+  margin: 0;
+}
+
+.aos-preview-chrome .panel-title h2 {
+  font-size: 0.82rem;
+}
+
+.aos-window-dots {
+  display: flex;
+  gap: 5px;
+}
+
+.aos-window-dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.aos-preview-body-wrap {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0.75rem;
+}
+
+.aos-preview-body-wrap .markdown-body {
+  flex: 1;
+  max-height: none !important;
+  overflow-y: auto !important;
+}
+
+.aos-preview-body-wrap .markdown-body h1,
+.aos-preview-body-wrap .markdown-body h2 {
+  color: var(--sr-purple);
+}
+
+.aos-preview-stats {
+  display: flex;
+  gap: 1rem;
+  padding: 0.4rem 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 0.65rem;
+  color: var(--sr-text-muted);
+  font-family: var(--sr-font-mono);
+  flex-shrink: 0;
+}
+
+/* ── Footer HUD ── */
+.aos-footer {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 0.5rem 1rem;
+  margin: 0;
+  border-top: 1px solid rgba(201, 160, 99, 0.28);
+  background: rgba(6, 8, 18, 0.88);
+  backdrop-filter: blur(12px);
+}
+
+.aos-footer-items {
+  display: flex;
+  flex: 1;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.aos-footer-action {
+  margin-left: auto;
+  background: transparent;
+  border: 1px solid var(--sr-gold-dim);
+  color: var(--sr-gold-bright);
+  padding: 0.4rem 0.85rem;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  box-shadow: 0 0 12px rgba(201, 160, 99, 0.1);
+}
+
+.aos-footer-action:hover:not(:disabled) {
+  box-shadow: 0 0 16px rgba(201, 160, 99, 0.25);
+}
+
+.aos-star-icon {
+  font-size: 0.85rem;
+}
+
+/* ── Glass panel shared ── */
+.aos-glass {
+  background: rgba(12, 16, 34, 0.72);
+  border: 1px solid rgba(201, 160, 99, 0.28);
+  border-radius: 10px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(14px);
+  position: relative;
+}
+
+.aos-glass::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 14px;
+  height: 14px;
+  border-top: 1px solid rgba(201, 160, 99, 0.55);
+  border-left: 1px solid rgba(201, 160, 99, 0.55);
+  pointer-events: none;
+}
+
+/* ── Mission launch in objective card ── */
+.aos-objective-card .aos-launch-row {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.aos-objective-card .aos-launch-row select,
+.aos-objective-card .aos-launch-row input {
+  flex: 1;
+  min-width: 120px;
+  padding: 0.35rem 0.5rem;
+  background: rgba(6, 8, 18, 0.8);
+  border: 1px solid rgba(100, 120, 180, 0.2);
+  border-radius: 4px;
+  color: inherit;
+  font-size: 0.78rem;
+}
+
+.aos-objective-card .aos-launch-btn {
+  width: auto;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.78rem;
+}
+
+/* ── Debug ── */
+.aos-debug {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.aos-debug-summary {
+  cursor: pointer;
+  padding: 0.45rem 0.85rem;
+  font-size: 0.78rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  list-style: none;
+}
+
+.aos-debug-summary::-webkit-details-marker {
+  display: none;
+}
+
+.aos-debug-body {
+  padding: 0 0.85rem 0.65rem;
+  max-height: 140px;
+  overflow-y: auto;
+}
+
+.aos-debug-body pre {
+  font-size: 0.65rem;
+  max-height: 80px;
+  overflow: auto;
+}
+
+.aos-debug-body details {
+  margin-bottom: 0.35rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1400px) {
+  .aos-app {
+    --aos-artifact-w: 28%;
+  }
+
+  .aos-objective-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 1100px) {
+  .aos-shell {
+    grid-template-columns: 1fr;
+    height: auto;
+    max-height: none;
+    overflow: auto;
+  }
+
+  .aos-sidebar {
+    height: auto;
+    max-height: none;
+  }
+
+  .aos-main {
+    overflow: visible;
+    padding: var(--aos-gap);
+  }
+
+  .aos-workspace {
+    grid-template-columns: 1fr;
+    overflow: visible;
+  }
+
+  .aos-objective-row {
+    grid-template-columns: 1fr;
+  }
+
+  .aos-footer {
+    flex-wrap: wrap;
+  }
+}
